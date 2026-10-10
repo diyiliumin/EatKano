@@ -176,7 +176,9 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
         _gameOver = false,
         _gameStart = false,
         _gameSettingNum=20,
-        _gameTime, _gameTimeNum, _gameScore, _date1, deviationTime;
+        _gameTime, _gameTimeNum, _gameScore, _date1, deviationTime,
+		_endAudio = null;
+
 
     let _gameStartTime, _gameStartDatetime;
 
@@ -237,8 +239,10 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
                 //createjs.Sound.play("end");
 				//createjs.Sound.play("end", { speed: 1.5 });
 				const endAudio = new Audio('./static/music/end.mp3');
+				endAudio.preservesPitch = false; // 关掉音调保持，速度变快音调就变高
 				endAudio.playbackRate = Math.min(Math.max(_gameScore / 100, 0.8), 16);
 				endAudio.play();
+				_endAudio = endAudio;
             }
         }
         updatePanel();
@@ -382,8 +386,10 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
 //                createjs.Sound.play("err");
 //				createjs.Sound.play("end", { speed: 1.5 });
 				const endAudio = new Audio('./static/music/end.mp3');
+				endAudio.preservesPitch = false; // 关掉音调保持，速度变快音调就变高
 				endAudio.playbackRate = Math.min(Math.max(_gameScore / 100, 0.8), 16);
 				endAudio.play();
+				_endAudio = endAudio;        // 👈 加这一行
             }
             tar.classList.add('bad');
             if (mode === MODE_PRACTICE) {
@@ -466,11 +472,13 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
     }
 
     w.replayBtn = function() {
+		if (_endAudio) { _endAudio.pause(); _endAudio = null; }
         gameRestart();
         hideGameScoreLayer();
     }
 
     w.backBtn = function() {
+		if (_endAudio) { _endAudio.pause(); _endAudio = null; }
         gameRestart();
         hideGameScoreLayer();
         showWelcomeLayer();
