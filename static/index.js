@@ -234,7 +234,11 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
             gameOver();
             GameLayerBG.className += ' flash';
             if (soundMode === 'on') {
-                createjs.Sound.play("end");
+                //createjs.Sound.play("end");
+				//createjs.Sound.play("end", { speed: 1.5 });
+				const endAudio = new Audio('./static/music/end.mp3');
+				endAudio.playbackRate = Math.min(Math.max(_gameScore / 100, 0.8), 16);
+				endAudio.play();
             }
         }
         updatePanel();
@@ -375,7 +379,11 @@ const MODE_NORMAL = 1, MODE_ENDLESS = 2, MODE_PRACTICE = 3;
             gameLayerMoveNextRow();
         } else if (_gameStart && !tar.notEmpty) {
             if (soundMode === 'on') {
-                createjs.Sound.play("err");
+//                createjs.Sound.play("err");
+//				createjs.Sound.play("end", { speed: 1.5 });
+				const endAudio = new Audio('./static/music/end.mp3');
+				endAudio.playbackRate = Math.min(Math.max(_gameScore / 100, 0.8), 16);
+				endAudio.play();
             }
             tar.classList.add('bad');
             if (mode === MODE_PRACTICE) {
